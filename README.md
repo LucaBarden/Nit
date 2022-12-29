@@ -5,12 +5,23 @@ While doing the project I kinda liked the idea to extend the project and see wha
 
 This whole project is planned to be written in Kotlin
 
+### Basic Usage:
+```console
+    ./build.sh
+    kotlin ./Nit/build/libs/Nit.jar
+```
+
 
 ### TODOS:
 - Refactor Code
 - Add Diff of Commits to Log
 - Add Stats Command to list unstaged Changes
 - ...
+
+### DONE:
+- Make Initialization a seperate Command
+- Add Command to Remove `Nit` from a Folder again
+- Changed some phrasing and naming of folders and files
 
 
 ### References:

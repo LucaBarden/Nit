@@ -5,8 +5,26 @@ plugins {
     application
 }
 
-group = "de.LucaBarden"
-version = "1.0-SNAPSHOT"
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "de.nit.MainKt"
+    }
+
+    archiveFileName.set("${project.name}.jar")
+
+    duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.EXCLUDE
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
+
+
+group = "de.nit"
+version = "0.1-ALPHA"
 
 repositories {
     mavenCentral()
