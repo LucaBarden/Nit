@@ -17,6 +17,7 @@
 - Add Possibility to add Folders (In Generall multiple Folders at once)
 - Add Command to unstage Files again
 - Add Command reset to reset changes that have been made
+- Commit History Format Data - Author - Commit Msg - Commit Hash
 - Maybe add File Compression and Decompression for Commits in the end
 
 ### DONE:
