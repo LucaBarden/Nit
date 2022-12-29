@@ -3,7 +3,7 @@
 
 While doing the project I kinda liked the idea to extend the project and see what it could end up with
 
-This whole project is planned to be written in Kotlin/Native so that we are able to use it without the need of the jvm
+This whole project is planned to be written in Kotlin
 
 
 ### TODOS:
