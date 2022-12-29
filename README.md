@@ -1,9 +1,7 @@
 # Nit - Not (G)it - VCS Client written in Kotlin
-## Simple VCS inspired by my Kotlin implementation of the VCS Project while learning
+## Simple VCS inspired by the Kotlin VCS Learning Project
 
-While doing the project I kinda liked the idea to extend the project and see what it could end up with
 
-This whole project is planned to be written in Kotlin
 
 ### Basic Usage:
 ```console
@@ -19,6 +17,7 @@ This whole project is planned to be written in Kotlin
 - Add Possibility to add Folders (In Generall multiple Folders at once)
 - Add Command to unstage Files again
 - Add Command reset to reset changes that have been made
+- Maybe add File Compression and Decompression for Commits in the end
 
 ### DONE:
 - Make Initialization a seperate Command
