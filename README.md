@@ -14,9 +14,11 @@ This whole project is planned to be written in Kotlin
 
 ### TODOS:
 - Refactor Code
-- Add Diff of Commits to Log
-- Add Stats Command to list unstaged Changes
-- ...
+- Add Diff of Commits to Log (More Detailed Logs)
+- Add Status Command to list unstaged Changes
+- Add Possibility to add Folders (In Generall multiple Folders at once)
+- Add Command to unstage Files again
+- Add Command reset to reset changes that have been made
 
 ### DONE:
 - Make Initialization a seperate Command
