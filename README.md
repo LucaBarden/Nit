@@ -13,9 +13,9 @@
 ### TODOS:
 - Refactor Code
 - Add Diff of Commits to Log (More Detailed Logs)
-- Add Status Command to list unstaged Changes
-- Add Possibility to add Folders (In Generall multiple Folders at once)
+- Add Possibility to add Folders (In Generall multiple Files at once)
 - Add Command to unstage Files again
+- Add Status Command to list unstaged Changes
 - Add Command reset to reset changes that have been made
 - Commit History Format Data - Author - Commit Msg - Commit Hash
 - Maybe add File Compression and Decompression for Commits in the end

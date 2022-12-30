@@ -1,26 +1,23 @@
 package de.nit
 
+
+import de.nit.Constants.COMMIT_FOLDER_PATH
+import de.nit.Constants.CONFIG_FILE_PATH
+import de.nit.Constants.CURRENT_WORKING_DIR
+import de.nit.Constants.INDEX_FILE_PATH
+import de.nit.Constants.LAST_COMMIT_FILE_PATH
+import de.nit.Constants.LOG_FILE_PATH
+import de.nit.Constants.NIT_FOLDER_PATH
+import de.nit.Constants.SEPERATOR
 import java.io.File
 
-const val NIT_FOLDER_NAME = ".nit"
-const val LOG_FILE_NAME = "log"
-const val LAST_COMMIT_FILE_NAME = "HEAD"
-const val CONFIG_FILE_NAME = "config"
-const val INDEX_FILE_NAME = "index"
+
 
 class Nit {
     companion object {
-        private val SEPERATOR: String = File.separator
-        private val CURRENT_WORKING_DIR: String = System.getProperty("user.dir")
 
-        private val NIT_FOLDER_PATH = "$NIT_FOLDER_NAME$SEPERATOR"
-        private val COMMIT_FOLDER_PATH = "${NIT_FOLDER_PATH}commits$SEPERATOR"
-        private val INDEX_FILE_PATH = "$NIT_FOLDER_PATH$INDEX_FILE_NAME"
-        private val CONFIG_FILE_PATH = "$NIT_FOLDER_PATH$CONFIG_FILE_NAME"
-        private val LAST_COMMIT_FILE_PATH = "$NIT_FOLDER_PATH$LAST_COMMIT_FILE_NAME"
-        private val LOG_FILE_PATH = "$NIT_FOLDER_PATH$LOG_FILE_NAME"
         fun runProgram(args: Array<String>) {
-            val mainCommand = checkForAndReturnFirstArgument(args)
+            val mainCommand = getFirstArgumentOrEmpty(args)
             if (mainCommand.isEmpty())
                 return
 
@@ -38,7 +35,7 @@ class Nit {
             executeCommand(mainCommand, args)
         }
 
-        private fun checkForAndReturnFirstArgument(args: Array<String>): String {
+        private fun getFirstArgumentOrEmpty(args: Array<String>): String {
             return if (args.isNotEmpty())
                 args[0]
             else {
@@ -68,7 +65,7 @@ class Nit {
             println("This will delete all versions logged in this repository.")
             println("Are you sure you want to continue? Y(es)/N(o)")
             val userOption = readln().lowercase()
-            if(userOption == "y" || userOption == "yes") {
+            if (userOption == "y" || userOption == "yes") {
                 File(NIT_FOLDER_PATH).deleteRecursively()
                 println("Nit has been removed from this folder")
                 return
@@ -150,43 +147,40 @@ class Nit {
             }
             val commitMessage = args[1]
             val trackFile = File(INDEX_FILE_PATH)
+            if (checkForCommittable(trackFile)) return
+
+            val currentCommitHash = getCommitHash(trackFile)
+            val lastCommitFile = File(LAST_COMMIT_FILE_PATH)
+            val lastCommitHash = lastCommitFile.readText()
+
+            if (checkForUnchangedRepo(currentCommitHash, lastCommitHash)) return
+
+            NitCommit.generateCommit(currentCommitHash, trackFile, commitMessage, lastCommitFile)
+
+        }
+
+        private fun checkForUnchangedRepo(currentCommitHash: String, lastCommitHash: String): Boolean {
+            if (currentCommitHash == lastCommitHash) {
+                println("Nothing to commit.")
+                return true
+            }
+            return false
+        }
+        
+        private fun checkForCommittable(trackFile: File): Boolean {
             if (trackFile.length() == 0L) {
                 println("Nothing to commit.")
-                return
+                return true
             }
+            return false
+        }
 
+        private fun getCommitHash(trackFile: File): String {
             var fileContents: String = ""
             for (fileName in trackFile.readLines()) {
                 fileContents += File(fileName).readText()
             }
-            val currentCommitHash = fileContents.hashCode().toString(16)
-            val lastCommitFile = File(LAST_COMMIT_FILE_PATH)
-            val lastCommitHash = lastCommitFile.readText()
-
-            if (currentCommitHash == lastCommitHash) {
-                println("Nothing to commit.")
-                return
-            }
-
-            val currentCommitDir = File(COMMIT_FOLDER_PATH + SEPERATOR + currentCommitHash + SEPERATOR)
-            currentCommitDir.mkdir()
-            for (fileName in trackFile.readLines()) {
-                File(fileName).copyTo(File(currentCommitDir.path + SEPERATOR + fileName))
-            }
-
-            saveCommitLog(commitMessage, currentCommitHash)
-            lastCommitFile.writeText(currentCommitHash)
-            println("Changes are committed.")
-
-
-        }
-
-        private fun saveCommitLog(commitMessage: String, currentCommitHash: String) {
-            val username = File(CONFIG_FILE_PATH).readText()
-            val logFile = File(LOG_FILE_PATH)
-            val logContent = logFile.readText()
-            val newCommitLog = "commit $currentCommitHash\nAuthor: $username\n$commitMessage"
-            logFile.writeText(newCommitLog + "\n" + logContent)
+            return fileContents.hashCode().toString(16)
         }
 
 
