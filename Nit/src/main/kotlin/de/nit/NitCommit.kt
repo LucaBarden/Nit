@@ -36,4 +36,12 @@ object NitCommit {
             File(fileName).copyTo(File(currentCommitDir.path + SEPERATOR + fileName))
         }
     }
+
+    fun getCommitHash(trackFile: File): String {
+        var fileContents = ""
+        for (fileName in trackFile.readLines()) {
+            fileContents += File(fileName).readText()
+        }
+        return fileContents.hashCode().toString(16)
+    }
 }
