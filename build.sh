@@ -3,5 +3,5 @@
 
 set -xe
 
-./Nit/gradlew build jar
+cd Nit && ./gradlew build jar
 
