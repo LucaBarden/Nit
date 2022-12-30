@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.lordcodes.turtle:turtle:0.8.0")
     testImplementation(kotlin("test"))
 }
 

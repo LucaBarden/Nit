@@ -1,6 +1,7 @@
 package de.nit
 
 
+import com.lordcodes.turtle.shellRun
 import de.nit.Constants.COMMIT_FOLDER_PATH
 import de.nit.Constants.CONFIG_FILE_PATH
 import de.nit.Constants.CURRENT_WORKING_DIR
@@ -52,8 +53,18 @@ object Nit {
             "log" -> logCommand()
             "checkout" -> checkoutCommand(arguments)
             "terminate" -> terminateCommand()
+            "test" -> testStuffCommand()
             else -> invalidCommand(arguments[0])
         }
+    }
+
+    private fun testStuffCommand() {
+        try {
+            val output = shellRun("diff")
+        }catch (e : Exception) {
+
+        }
+
     }
 
     private fun terminateCommand() {
