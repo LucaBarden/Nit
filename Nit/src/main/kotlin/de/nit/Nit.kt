@@ -10,10 +10,8 @@ import de.nit.Constants.LOG_FILE_PATH
 import de.nit.Constants.NIT_FOLDER_PATH
 import de.nit.Constants.SEPERATOR
 import de.nit.NitCommit.getCommitHash
-import org.zeroturnaround.exec.ProcessExecutor
-import java.io.BufferedReader
+
 import java.io.File
-import java.io.InputStreamReader
 
 
 object Nit {
@@ -55,13 +53,8 @@ object Nit {
             "log" -> logCommand()
             "checkout" -> checkoutCommand(arguments)
             "terminate" -> terminateCommand()
-            "test" -> testStuffCommand(arguments)
             else -> invalidCommand(arguments[0])
         }
-    }
-
-    private fun testStuffCommand(arguments: Array<String>) {
-        val output = ProcessExecutor().command("diff", "test1", "test2").readOutput(true).execute().outputString()
     }
 
     private fun terminateCommand() {
@@ -200,7 +193,7 @@ object Nit {
     private fun addFile(fileToAdd: File) {
         val trackFile = File(INDEX_FILE_PATH)
         if (trackFile.canWrite()) {
-            val fileName = fileToAdd.name
+            val fileName = fileToAdd.path
             trackFile.appendText(fileName + '\n')
             println("The file '$fileName' is tracked.")
         } else
