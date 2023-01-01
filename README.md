@@ -31,3 +31,4 @@
  - [Kotlin VCS Learning Project](https://hyperskill.org/projects/177?track=18)
  - [My Implementation during the Project](https://github.com/LucaBarden/kotlin-learning-path/tree/master/Version%20Control%20System)
  - [zt-exec Package for executing shell commands](https://github.com/zeroturnaround/zt-exec)
+ - [Google Guava Library](https://github.com/google/guava)
