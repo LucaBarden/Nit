@@ -2,6 +2,13 @@
 ## Simple VCS inspired by the Kotlin VCS Learning Project
 
 
+### Requirements
+
+```
+kotlin diff
+```
+
+
 
 ### Basic Usage:
 ```console
