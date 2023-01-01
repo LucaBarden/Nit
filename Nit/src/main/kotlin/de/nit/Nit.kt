@@ -191,13 +191,14 @@ object Nit {
 
         if (checkForUnchangedRepo(currentCommitHash, lastCommitHash)) return
 
-        NitCommit.generateCommit(currentCommitHash, trackFile, commitMessage, lastCommitFile)
+        NitCommit.generateCommit(currentCommitHash, commitMessage, lastCommitFile)
 
     }
 
     private fun checkForUnchangedRepo(currentCommitHash: String, lastCommitHash: String): Boolean {
         if (currentCommitHash == lastCommitHash) {
             println("Nothing to commit.")
+            NitCommit.clearIndex()
             return true
         }
         return false

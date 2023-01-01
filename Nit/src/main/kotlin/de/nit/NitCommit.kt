@@ -1,5 +1,6 @@
 package de.nit
 
+import com.google.common.hash.Hashing
 import java.io.File
 import de.nit.Constants.COMMIT_FOLDER_PATH
 import de.nit.Constants.CONFIG_FILE_PATH
@@ -8,6 +9,8 @@ import de.nit.Constants.LAST_COMMIT_FILE_PATH
 import de.nit.Constants.LOG_FILE_PATH
 import de.nit.Constants.SEPERATOR
 import org.zeroturnaround.exec.ProcessExecutor
+import java.math.BigInteger
+import java.nio.charset.Charset
 import java.time.LocalDateTime
 import kotlin.math.absoluteValue
 
@@ -15,19 +18,18 @@ import kotlin.math.absoluteValue
 object NitCommit {
     fun generateCommit(
         currentCommitHash: String,
-        trackFile: File,
         commitMessage: String,
         lastCommitFile: File
     ) {
-        generateCommitFiles(currentCommitHash, trackFile)
-        var lastCommitHash = File(LAST_COMMIT_FILE_PATH).readText()
+        generateCommitFiles(currentCommitHash)
+        val lastCommitHash = File(LAST_COMMIT_FILE_PATH).readText()
         saveCommitLog(commitMessage, currentCommitHash, lastCommitHash)
         lastCommitFile.writeText(currentCommitHash)
         println("Changes are committed.")
         clearIndex()
     }
 
-    private fun clearIndex() {
+    fun clearIndex() {
         File(INDEX_FILE_PATH).writeText("")
     }
 
@@ -57,11 +59,11 @@ object NitCommit {
         return fileDiff
     }
 
-    private fun generateCommitFiles(currentCommitHash: String, trackFile: File) {
+    private fun generateCommitFiles(currentCommitHash: String) {
         val currentCommitDir = File(COMMIT_FOLDER_PATH +  currentCommitHash + SEPERATOR)
         currentCommitDir.mkdir()
 
-        for (fileName in File(".").listFiles().filter { ".git" !in it.path }.filter { ".nit" !in it.path }.map { it.path }) {
+        for (fileName in File(".").listFiles()!!.filter { ".git" !in it.path }.filter { ".nit" !in it.path }.map { it.path }) {
             File(fileName).copyRecursively(File(currentCommitDir.path + SEPERATOR + fileName))
         }
     }
@@ -71,6 +73,8 @@ object NitCommit {
         for (fileName in trackFile.readLines()) {
             fileContents += File(fileName).readText()
         }
-        return fileContents.hashCode().absoluteValue.toString(16)
+        val hashFunction = Hashing.sha256()
+        val hashCode = hashFunction.newHasher().putString(fileContents, Charset.defaultCharset()).hash()
+        return BigInteger(hashCode.asBytes()).abs().toString(16).substring(0,20)
     }
 }

@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.google.guava:guava:31.1-jre")
     implementation("org.slf4j:slf4j-simple:2.0.6")
     implementation("org.slf4j:log4j-over-slf4j:2.0.6")
     implementation("org.zeroturnaround:zt-exec:1.12")
