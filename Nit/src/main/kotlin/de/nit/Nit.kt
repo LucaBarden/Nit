@@ -12,6 +12,7 @@ import de.nit.Constants.SEPERATOR
 import de.nit.NitCommit.getCommitHash
 
 import java.io.File
+import java.util.regex.Pattern
 
 
 object Nit {
@@ -66,13 +67,20 @@ object Nit {
         val indexFile = File(INDEX_FILE_PATH)
         val indexedFiles = indexFile.readText()
         val fileToRemove = arguments[1]
-        if(fileToRemove !in indexedFiles){
+        if(!isContaining(indexedFiles, fileToRemove)){
             println("$fileToRemove is not staged")
             return
         }
         val newIndexFileContent = indexedFiles.replace(fileToRemove+"\n", "")
         indexFile.writeText(newIndexFileContent)
         println("$fileToRemove is no longer staged")
+    }
+
+    private fun isContaining(source : String, subItem : String) : Boolean {
+        val pattern = "\\b$subItem\\b"
+        val p = Pattern.compile(pattern)
+        val m = p.matcher(source)
+        return m.find()
     }
 
     private fun terminateCommand() {
