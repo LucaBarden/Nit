@@ -55,28 +55,38 @@ object Nit {
             "checkout" -> checkoutCommand(arguments)
             "terminate" -> terminateCommand()
             "remove" -> removeCommand(arguments)
+            "reset" -> resetCommand()
             else -> invalidCommand(arguments[0])
         }
     }
 
+    private fun resetCommand() {
+        val lastCommitHash = File(LAST_COMMIT_FILE_PATH).readText()
+        val lastCommit = File(COMMIT_FOLDER_PATH + lastCommitHash)
+        for (file in lastCommit.walkTopDown()) {
+            val destination = File("." + SEPERATOR + file.path.substringAfter(lastCommitHash))
+            File(file.path).copyRecursively(destination, overwrite = true)
+        }
+    }
+
     private fun removeCommand(arguments: Array<String>) {
-        if(arguments.size < 2) {
+        if (arguments.size < 2) {
             println("You didn't provide a file to unstage.")
             return
         }
         val indexFile = File(INDEX_FILE_PATH)
         val indexedFiles = indexFile.readText()
         val fileToRemove = arguments[1]
-        if(!isContaining(indexedFiles, fileToRemove)){
+        if (!isContaining(indexedFiles, fileToRemove)) {
             println("$fileToRemove is not staged")
             return
         }
-        val newIndexFileContent = indexedFiles.replace(fileToRemove+"\n", "")
+        val newIndexFileContent = indexedFiles.replace(fileToRemove + "\n", "")
         indexFile.writeText(newIndexFileContent)
         println("$fileToRemove is no longer staged")
     }
 
-    private fun isContaining(source : String, subItem : String) : Boolean {
+    private fun isContaining(source: String, subItem: String): Boolean {
         val pattern = "\\b$subItem\\b"
         val p = Pattern.compile(pattern)
         val m = p.matcher(source)
@@ -209,7 +219,7 @@ object Nit {
             val indexFile = File(INDEX_FILE_PATH)
             val indexedFiles = indexFile.readText()
             val fileNameToAdd = args[1]
-            if(fileNameToAdd in indexedFiles) {
+            if (fileNameToAdd in indexedFiles) {
                 println("$fileNameToAdd is already staged")
                 return
             }
@@ -274,6 +284,7 @@ object Nit {
                     |config              Get and set a username.
                     |add                 Add a file to the Staged File Index.
                     |remove              Remove a file from the Staged File Index.
+                    |reset               Resets the Working Directory to the state of the last commit.
                     |commit              Commit Staged Files.
                     |checkout            Restore the state of files of a given commit.
                     |terminate           Removes Nit tracking from the current repository.

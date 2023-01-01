@@ -14,7 +14,6 @@
 - Refactor Code
 - Add Possibility to add Folders (In Generall multiple Files at once)
 - Add Status Command to list unstaged Changes
-- Add Command reset to reset changes that have been made
 - Maybe add File Compression and Decompression for Commits in the end
 - Rework Hashing with Guava
 
@@ -25,6 +24,7 @@
 - Changed some phrasing and naming of folders and files
 - Add Diff of Commits to Log (More Detailed Logs)
 - Commit History Format Data - Author - Commit Msg - Commit Hash
+- Add Command reset to reset changes that have been made
 
 
 ### References:
