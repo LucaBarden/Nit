@@ -72,6 +72,7 @@ object Nit {
         }
         val newIndexFileContent = indexedFiles.replace(fileToRemove+"\n", "")
         indexFile.writeText(newIndexFileContent)
+        println("$fileToRemove is no longer staged")
     }
 
     private fun terminateCommand() {
@@ -197,7 +198,13 @@ object Nit {
         if (args.size < 2) {
             outputTrackedFiles()
         } else {
+            val indexFile = File(INDEX_FILE_PATH)
+            val indexedFiles = indexFile.readText()
             val fileNameToAdd = args[1]
+            if(fileNameToAdd in indexedFiles) {
+                println("$fileNameToAdd is already staged")
+                return
+            }
             val fileToAdd = File(fileNameToAdd)
             if (!fileToAdd.exists()) {
                 println("Can't find '$fileNameToAdd'.")
@@ -208,10 +215,10 @@ object Nit {
     }
 
     private fun addFile(fileToAdd: File) {
-        val trackFile = File(INDEX_FILE_PATH)
-        if (trackFile.canWrite()) {
+        val indexFile = File(INDEX_FILE_PATH)
+        if (indexFile.canWrite()) {
             val fileName = fileToAdd.path
-            trackFile.appendText(fileName + '\n')
+            indexFile.appendText(fileName + '\n')
             println("The file '$fileName' is tracked.")
         } else
             println("Could not write to index file")
