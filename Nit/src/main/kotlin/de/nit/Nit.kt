@@ -53,8 +53,25 @@ object Nit {
             "log" -> logCommand()
             "checkout" -> checkoutCommand(arguments)
             "terminate" -> terminateCommand()
+            "remove" -> removeCommand(arguments)
             else -> invalidCommand(arguments[0])
         }
+    }
+
+    private fun removeCommand(arguments: Array<String>) {
+        if(arguments.size < 2) {
+            println("You didn't provide a file to unstage.")
+            return
+        }
+        val indexFile = File(INDEX_FILE_PATH)
+        val indexedFiles = indexFile.readText()
+        val fileToRemove = arguments[1]
+        if(fileToRemove !in indexedFiles){
+            println("$fileToRemove is not staged")
+            return
+        }
+        val newIndexFileContent = indexedFiles.replace(fileToRemove+"\n", "")
+        indexFile.writeText(newIndexFileContent)
     }
 
     private fun terminateCommand() {
@@ -241,6 +258,7 @@ object Nit {
                     |init                Initializes a Nit Repository
                     |config              Get and set a username.
                     |add                 Add a file to the Staged File Index.
+                    |remove              Remove a file from the Staged File Index.
                     |commit              Commit Staged Files.
                     |checkout            Restore the state of files of a given commit.
                     |terminate           Removes Nit tracking from the current repository.
