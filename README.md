@@ -5,7 +5,7 @@
 ### Requirements
 
 ```
-kotlin diff
+kotlin, diff
 ```
 
 
