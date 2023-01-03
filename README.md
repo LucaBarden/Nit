@@ -1,6 +1,8 @@
 # Nit - Not (G)it - VCS Client written in Kotlin
 ## Simple VCS inspired by the Kotlin VCS Learning Project
 
+#### Unfinished Project
+
 
 ### Requirements
 
